@@ -1,9 +1,11 @@
 import { Box, Container, Heading, SimpleGrid, Text, VStack, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { FaUsb } from 'react-icons/fa';
+import DeviceDashboard from './components/DeviceDashboard';
 
 function App() {
   const [devices, setDevices] = useState([]);
+  const [selectedDevice, setSelectedDevice] = useState(null);
   const toast = useToast();
 
   const fetchDevices = async () => {
@@ -49,76 +51,25 @@ function App() {
                 rounded="lg"
                 shadow="md"
                 borderWidth="1px"
-                _hover={{ transform: 'translateY(-2px)', shadow: 'lg' }}
+                _hover={{ transform: 'translateY(-2px)', shadow: 'lg', cursor: 'pointer' }}
                 transition="all 0.2s"
+                onClick={() => setSelectedDevice(device)}
               >
                 <VStack align="stretch" spacing={3}>
                   <Heading size="md" color="blue.600">
-                    Device {index + 1}
+                    {device.product || `Device ${index + 1}`}
                   </Heading>
                   <Box>
                     <Text fontWeight="bold">Manufacturer:</Text>
                     <Text>{device.manufacturer || 'N/A'}</Text>
                   </Box>
                   <Box>
-                    <Text fontWeight="bold">Product:</Text>
-                    <Text>{device.product || 'N/A'}</Text>
-                  </Box>
-                  <Box>
-                    <Text fontWeight="bold">Vendor ID:</Text>
-                    <Text>{device.vendorId}</Text>
-                  </Box>
-                  <Box>
-                    <Text fontWeight="bold">Product ID:</Text>
-                    <Text>{device.productId}</Text>
-                  </Box>
-                  <Box>
-                    <Text fontWeight="bold">Serial Number:</Text>
-                    <Text>{device.serial || 'N/A'}</Text>
-                  </Box>
-                  <Box>
                     <Text fontWeight="bold">Device Class:</Text>
                     <Text>{device.deviceClass || 'N/A'}</Text>
                   </Box>
                   <Box>
-                    <Text fontWeight="bold">Device SubClass:</Text>
-                    <Text>{device.deviceSubClass || 'N/A'}</Text>
-                  </Box>
-                  <Box>
-                    <Text fontWeight="bold">Device Protocol:</Text>
-                    <Text>{device.deviceProtocol || 'N/A'}</Text>
-                  </Box>
-                  <Box>
-                    <Text fontWeight="bold">Speed:</Text>
-                    <Text>{device.speed || 'N/A'}</Text>
-                  </Box>
-                  <Box>
-                    <Text fontWeight="bold">Location ID:</Text>
-                    <Text>{device.locationId || 'N/A'}</Text>
-                  </Box>
-                  <Box>
-                    <Text fontWeight="bold">Current Available:</Text>
-                    <Text>{device.currentAvailable ? `${device.currentAvailable}mA` : 'N/A'}</Text>
-                  </Box>
-                  <Box>
-                    <Text fontWeight="bold">Current Required:</Text>
-                    <Text>{device.currentRequired ? `${device.currentRequired}mA` : 'N/A'}</Text>
-                  </Box>
-                  <Box>
-                    <Text fontWeight="bold">Extra Operating Current:</Text>
-                    <Text>{device.extraOperatingCurrent ? `${device.extraOperatingCurrent}mA` : 'N/A'}</Text>
-                  </Box>
-                  <Box>
-                    <Text fontWeight="bold">Bus Number:</Text>
-                    <Text>{device.busNumber || 'N/A'}</Text>
-                  </Box>
-                  <Box>
-                    <Text fontWeight="bold">Port Numbers:</Text>
-                    <Text>{device.portNumbers ? device.portNumbers.join(', ') : 'N/A'}</Text>
-                  </Box>
-                  <Box>
-                    <Text fontWeight="bold">Description:</Text>
-                    <Text>{device.description || 'N/A'}</Text>
+                    <Text fontWeight="bold">Serial Number:</Text>
+                    <Text>{device.serial || 'N/A'}</Text>
                   </Box>
                 </VStack>
               </Box>
@@ -132,6 +83,12 @@ function App() {
               </Text>
             </Box>
           )}
+
+          <DeviceDashboard
+            isOpen={selectedDevice !== null}
+            onClose={() => setSelectedDevice(null)}
+            device={selectedDevice}
+          />
         </VStack>
       </Container>
     </Box>
